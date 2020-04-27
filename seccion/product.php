@@ -10,7 +10,7 @@ $padre->execute();
 $result2 = $padre->fetch(PDO::FETCH_ASSOC);
 }
 
-echo($sql);
+
 
 
 
@@ -28,10 +28,12 @@ echo($sql);
                             <li><a href="index.php">Home</a></li>
                             
                             <li><a href="index.php?seccion=product">Productos</a></li>
+                        
 
-                            <?php if(isset($_GET['idcatp'] )){
-                                        if($_GET['idcatp']=0){
-                                ?>                                		
+                            <?php                             
+                                if(isset($_GET['idcatp'] )){
+                                if($_GET['idcatp']=0){
+                            ?>                                		
 							<li><a href="index.php?seccion=product&idcatp=0&idcat=<?php echo $result2["id_categoria"] ?>">
                             <?php echo $result2["nombre"] ?></a></li>
                             
@@ -42,9 +44,9 @@ echo($sql);
                         
                             <?php    }}?>
 
-                            <?php if(isset($_GET['idcat']) && $_GET['idcatp']>0){
+                            <?php if(isset($_GET['idcat']) && isset($_GET['idcatp']) && $_GET['idcatp']>0){
                               
-                                ?> 
+                            ?> 
 							<li class="active"><a href="index.php?seccion=product&idcatp=<?php echo $sql["id_padre"] ?>&idcat=<?php echo $result2["id_categoria"] ?>">
 								<?php echo $result2["nombre"]; ?></a></li><?php } ?>
 						</ul>
@@ -184,7 +186,7 @@ echo($sql);
 
                             <!-- product -->
                             <?php 
-
+                        
                                     echo printProduct($con, $sql);
                                 
 							?>
