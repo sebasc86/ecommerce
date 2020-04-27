@@ -1,37 +1,60 @@
-<?php 
-if (isset($_GET['idcatp'])){
+    <?php 
 
-$sqlcat='SELECT * FROM web.categorias INNER JOIN web.productos ON categorias.id_categoria = productos.id_categoria
-WHERE categorias.id_padre='.$_GET['idcatp'];
 
-// agregar en el WHERE :.' AND categorias.id_categoria='.$_GET['idcat'].''; para filtrar por sub categorias.
-// el get tiene que estar definido en los filtros
 
+if(isset($_GET['idcat'])){
+    $id_padre = $_GET['idcat'];
+
+$padre = $con->prepare("SELECT * FROM web.categorias WHERE id_categoria = $id_padre");
+$padre->execute();
+$result2 = $padre->fetch(PDO::FETCH_ASSOC);
 }
- 
+
+echo($sql);
+
+
 ?>
 
 <!-- BREADCRUMB -->
+			   
 <div id="breadcrumb" class="section">
-    <!-- container -->
-    <div class="container">
-        <!-- row -->
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="breadcrumb-tree">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<ul class="breadcrumb-tree">
+                            <li><a href="index.php">Home</a></li>
+                            
+                            <li><a href="index.php?seccion=product">Productos</a></li>
 
-                    <li><a href="index.php?seccion=product&id_categoria=">Categorias</a></li>
-                    <li><a href="index.php?seccion=product&id_categoria=">Sub Categorias</a></li>
-                    <!-- ACA HAY QUE HACER QUERY CON CATEGORIA TRAIDA Y CANTIDAD DE RESULTADOS -->
+                            <?php if(isset($_GET['idcatp'] )){
+                                        if($_GET['idcatp']=0){
+                                ?>                                		
+							<li><a href="index.php?seccion=product&idcatp=0&idcat=<?php echo $result2["id_categoria"] ?>">
+                            <?php echo $result2["nombre"] ?></a></li>
+                            
+                            
+                            <?php } else {?> <li><a href="index.php?seccion=product&idcatp=0&idcat=<?php echo $result2["id_categoria"] ?>">
+                            <?php echo $result2["nombre"] ?></a></li>
+                        
+                        
+                            <?php    }}?>
 
-                </ul>
-            </div>
-        </div>
-        <!-- /row -->
-    </div>
-    <!-- /container -->
-</div>
-<!-- /BREADCRUMB -->
+                            <?php if(isset($_GET['idcat']) && $_GET['idcatp']>0){
+                              
+                                ?> 
+							<li class="active"><a href="index.php?seccion=product&idcatp=<?php echo $sql["id_padre"] ?>&idcat=<?php echo $result2["id_categoria"] ?>">
+								<?php echo $result2["nombre"]; ?></a></li><?php } ?>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+	</div>
+		<!-- /BREADCRUMB -->
+
 
 <!-- SECTION -->
 <div class="section">
@@ -42,26 +65,26 @@ WHERE categorias.id_padre='.$_GET['idcatp'];
             <!-- ASIDE -->
             <div id="aside" class="col-md-3">
                 <!-- aside Widget -->
-
-                <div class="aside"  action="../../procesar-review.php" method="post">
+                <div class="aside">
                     <h3 class="aside-title">Categorias</h3>
-					
-					    <?php echo printCat($con)?>
 
+                    <?php echo printCat($con)?>
 
                 </div>
                 <!-- /aside Widget -->
 
-				<!-- aside Widget -->
-				<div class="aside" >
-        				<h3 class="aside-title">Marca</h3>
-                 
-						<?php echo printMarca($con, $sql)?>
-						 
-				</div>		 
+                <!-- aside Widget -->
+                <div class="aside">
+                    <h3 class="aside-title">Marca</h3>
+
+                    <?php echo printMarca($con, $sql)?>
+
+                </div>
+
                 <!-- /aside Widget -->
 
                 <!-- aside Widget -->
+
                 <div class="aside">
                     <h3 class="aside-title">Precio</h3>
                     <div class="price-filter">
@@ -79,6 +102,11 @@ WHERE categorias.id_padre='.$_GET['idcatp'];
                         </div>
                     </div>
                 </div>
+
+                <br>
+                <button onclick="window.location.href='index.php?seccion=product'" type="button" class="btn btn-primary btn-block">Borrar
+                    Filtro(s)</button>
+                <br>
                 <!-- /aside Widget -->
 
 
@@ -152,18 +180,15 @@ WHERE categorias.id_padre='.$_GET['idcatp'];
                 <div class="row">
                     <div class="checkbox-filter">
                         <div class="">
-                            
-                                <!-- product -->
-                                <?php 
 
-                               if(empty($_GET['idcatp'])){
+                            <!-- product -->
+                            <?php 
+
                                     echo printProduct($con, $sql);
-                                } else {
-                                    echo printProductFiltered($con, $sqlcat);
-                                }
+                                
 							?>
-                                <!-- /product -->
-                            
+                            <!-- /product -->
+
                         </div>
                     </div>
                 </div>
@@ -189,3 +214,4 @@ WHERE categorias.id_padre='.$_GET['idcatp'];
     <!-- /container -->
 </div>
 <!-- /SECTION -->
+</div>

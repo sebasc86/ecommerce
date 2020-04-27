@@ -3,6 +3,7 @@
 require_once('database/mysql-login.php');
 require_once('seccion/array.php');
 require_once('helpers/functions.php');
+require_once('helpers/querys.php');
 
 $con = new PDO('mysql:host='.$hostname.';port='.$port.';dbname='.$database, $username, $password);
 
@@ -25,10 +26,10 @@ $seccion = $_GET["seccion"] ?? "home";
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
 		<!-- Bootstrap 4.1.1 -->
-		//<link type="text/css" rel="stylesheet" href="css/bootstrap4.1.1.min.css"/>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap4.1.1.min.css"/>
 		
 		<!-- Bootstrap 3.7 -->
-		//<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
 		
 		<!-- Slick -->
 		<link type="text/css" rel="stylesheet" href="css/slick.css"/>
@@ -112,7 +113,7 @@ $seccion = $_GET["seccion"] ?? "home";
 								<div class="menu-toggle">
 									<a href="#">
 										<i class="fa fa-bars"></i>
-										<span>Menu </span>
+										<span>Menu</span>
 									</a>
 								</div>
 								<!-- /Menu Toogle -->

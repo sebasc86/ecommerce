@@ -1,10 +1,9 @@
 <?php
 
-$sql=''; 
+
 
 function printCat($con, $id_padre = 0){
     $sql = 'SELECT * FROM categorias WHERE id_padre = '.$id_padre;
-    
     $resultado = $con->query($sql);
     
     if(!empty($resultado)){
@@ -12,14 +11,23 @@ function printCat($con, $id_padre = 0){
         
         foreach($resultado as $row){
             
-            
-            $salida.= 	'<div class="input-checkbox">
-                            <input type="checkbox" id="category-'. $row['id_categoria']  .'">
+            if (empty($_GET['marca'])) {
+                $link = 'index.php?seccion=product&idcatp='.$id_padre.'&idcat=' . $row['id_categoria']; 
+            }else{    
+                $link = 'index.php?seccion=product&idcat=' . $row['id_categoria'] . '&marca=' . $_GET['marca'];              
+            }
+        
+
+            $salida.= 	'<div class="">
+                            <a href="' . $link . '" .  
+                            id="category-'. $row['id_categoria']  .'">
                                 <label for="category-'. $row['id_categoria'] .'">
                                     <span></span>' . 
-                                    $row['nombre']
-                                    . printCat($con, $row['id_categoria']) .
-                                '</label>
+                                    $row['nombre'] .
+                                    '<div class="input-checkbox">'
+                                       . printCat($con, $row['id_categoria']) .
+                                    '</div>
+                                </label></a>
                         </div>';
             }
             $salida.= '';
@@ -27,7 +35,9 @@ function printCat($con, $id_padre = 0){
         return $salida;
 }
 
+
 function printCatHome($con,  $id_padre = 0){
+    
     $sql = 'SELECT * FROM categorias WHERE id_padre = '.$id_padre;
     $resultado = $con->query($sql);
     
@@ -50,44 +60,56 @@ function printCatHome($con,  $id_padre = 0){
         }
         $salida.= '';
 }
-                return $salida;}
+                return $salida;
+}
 
 
 function printMarca($con, $sql){
+    
+    $sql = $sql . ' GROUP BY productos.id_marca';    
 
-    if(empty($sql)){
-    $sql = 'SELECT * FROM web.marcas';}
-    else {$sql=$sql;}
     $resultado = $con->query($sql);
     
     if(!empty($resultado)){
         $salida = '' ;
-        $cont = 1;
-        foreach($resultado as $row){
-            $cont++;
+
+            $cont = 0; 
             
-            $salida.= '<div class="checkbox-filter">
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="brand-' . $row['nombre'] . '">
-                                    <label for="brand-' . $row['nombre'] . '">
-                                        <span></span>
-                                        ' . $row['nombre'] . '
-                                        <small>(578)</small>
-                                    </label>
-                            </div>                
-                        </div>';
+            foreach($resultado as $row){
+
+            
+            if (empty($_GET['idcat'])) {
+                    $link = 'index.php?seccion=product&marca=' . $row['id_marca']; 
+            }else{    
+                $link = 'index.php?seccion=product&idcat=' . $_GET['idcat'] . '&marca=' . $row['id_marca'];              
             }
+
+            $salida.= '<div class="input-checkbox">
+                            <a href="' . $link . '" id="brand-' . $row['nombre'] . '">                               
+                                <label for="brand-' . $row['nombre'] . '">
+                                    <span></span>
+                                    ' . $row['nombre'] . '
+                                    <small></small>
+                                </label></a>
+                                </div>';    
+                     
+            }  
+           
             $salida.='';
-        
+
     return $salida;
-}}
+    
+    }
+}
 
 
 function printProduct($con, $sql){
 
-
+if(!isset($sql)){
     $sql = 'SELECT * FROM web.productos';
-    $resultado = $con->query($sql);
+    $resultado = $con->query($sql);}
+    else{
+        $resultado = $con->query($sql);}
     
     if(!empty($resultado)){
         $salida = '' ;
@@ -95,7 +117,7 @@ function printProduct($con, $sql){
         foreach($resultado as $row){
             $cont++;
             
-            $salida.='<div class="col-sm-12 col-md-6 col-lg-4 mb-5 mb-md-3">
+            $salida.='<div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-3">
                                     <div class="product">
                                         <div class="product-img">
                                             <img src="./imagenes/'. $row['img'] .'" alt="">
@@ -145,7 +167,7 @@ function printProductFiltered($con, $sql){
         foreach($resultado as $row){
             $cont++;
             
-            $salida.='<div class="col-sm-12 col-md-6 col-lg-4 mb-5 mb-md-3">
+            $salida.='<div class="col-12 col-md-6 col-lg-4 mb-5 mb-md-3">
                                     <div class="product">
                                         <div class="product-img">
                                             <img src="./imagenes/'. $row['img'] .'" alt="">

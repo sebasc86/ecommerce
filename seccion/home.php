@@ -1,4 +1,15 @@
 <?php 
+
+$sqldestacados="SELECT *, ROUND(AVG(valoracion),1) as promedio FROM web.ranking
+INNER JOIN web.productos 
+ON ranking.id_producto = productos.id_producto 
+INNER JOIN web.marcas 
+ON productos.id_marca = marcas.id_marca 
+GROUP BY ranking.id_producto
+ORDER BY promedio DESC
+LIMIT 10";
+
+
 ?>	<!-- SECTION -->
 <div class="section">
     <!-- container -->
@@ -46,7 +57,7 @@
 								<div id="tab1" class="tab-pane active">
 									<div class="products-slick" data-nav="#slick-nav-1">
 									<?php 
-											echo printProduct($con, $sql);
+											echo printProduct($con, $sqldestacados);
 							?>								
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>
