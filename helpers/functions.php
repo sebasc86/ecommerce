@@ -14,7 +14,7 @@ function printCat($con, $id_padre = 0){
             if (empty($_GET['marca'])) {
                 $link = 'index.php?seccion=product&idcatp='.$id_padre.'&idcat=' . $row['id_categoria']; 
             }else{    
-                $link = 'index.php?seccion=product&idcat=' . $row['id_categoria'] . '&marca=' . $_GET['marca'];              
+                $link = 'index.php?seccion=product&idcatp='.$id_padre.'&idcat=' . $row['id_categoria'] . '&marca=' . $_GET['marca'];              
             }
         
 
@@ -81,7 +81,7 @@ function printMarca($con, $sql){
             if (empty($_GET['idcat'])) {
                     $link = 'index.php?seccion=product&marca=' . $row['id_marca']; 
             }else{    
-                $link = 'index.php?seccion=product&idcat=' . $_GET['idcat'] . '&marca=' . $row['id_marca'];              
+                $link = 'index.php?seccion=product&idcatp=0&idcat=' . $_GET['idcat'] . '&marca=' . $row['id_marca'];              
             }
 
             $salida.= '<div class="input-checkbox">
